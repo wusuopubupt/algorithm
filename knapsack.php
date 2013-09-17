@@ -11,7 +11,7 @@ $solution = array(-1,-1,-1,-1,-1); //solution vector
  * n: number of items
  * content: the maximum content of the knapsack 
  */
-function knapsack($n,$content) {
+function knapsack($n,$content) {	
 	
 	global $weight;
 	global $value;
