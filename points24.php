@@ -1,7 +1,7 @@
 <?php
 define('PRECISION', 1E-6);
 
-$number  = array(2,2,2,4);
+$number  = array(4,5,6,7);
 $formula = $number;
 $sentinels = array();
 $sentinel = 1;
@@ -20,10 +20,11 @@ function search($n) {
 			$fml = escape_brackets($formula[0]);
 			//$sentinel = weight($sentinel,$fml);
 			
-			if(check_exist($sentinel,$sentinels)){
-				$sentinels[] = $sentinel;
+			if(check_exist($fml,$sentinels)){
+				$sentinels[] = $fml;
 				var_dump($fml);
-				var_dump($sentinel);
+				echo "<br>";
+				//var_dump($sentinel);
 				//$sentinel = 0;
 				return true;
 			}
@@ -47,32 +48,32 @@ function search($n) {
 				$formula_b = $formula[$j];
 				$formula[$j] = $formula[$n-1];
 				
-				$formula[$i] = $n == 2 ? $formula_a.'+'.$formula_b : '('.$formula_a.'+'.$formula_b.')';
+				$formula[$i] = $formula_a.$formula_b.'+';
 				$number[$i] = $a + $b;
 				$sentinel *= 2 ;
 				search($n-1);				
 				$sentinel /= 2;
 				
-				$formula[$i] = $n == 2 ? $formula_a.'-'.$formula_b :'('.$formula_a.'-'.$formula_b.')';
+				$formula[$i] =  $formula_a.$formula_b.'-';
 				$number[$i] = $a - $b;
 				$sentinel *= 3;
 				search($n-1);
 				$sentinel /= 3;
 				
-				$formula[$i] = $n == 2 ? $formula_b.'-'.$formula_a :'('.$formula_b.'-'.$formula_a.')';
+				$formula[$i] = $formula_b.$formula_a.'-';
 				$number[$i] = $b - $a;
 				$sentinel *= 3;
 				search($n-1);
 				$sentinel /= 3;
 				
-				$formula[$i] = $formula_a.'*'.$formula_b;					
+				$formula[$i] = $formula_a.$formula_b.'*';					
 				$number[$i] = $a * $b;
 				$sentinel *= 5;
 				search($n-1);
 				$sentinel /= 5;
 									
 				if($b != 0){
-					$formula[$i] = $formula_a.'/'.$formula_b;
+					$formula[$i] = $formula_a.$formula_b.'/';
 					$number[$i] = $a / $b;
 					$sentinel *= 7;
 					search($n-1);
@@ -80,7 +81,7 @@ function search($n) {
 				}
 				
 				if($a != 0){
-					$formula[$i] = $formula_b.'/'.$formula_a;
+					$formula[$i] = $formula_b.$formula_a.'/';
 					$number[$i] = $b / $a;
 					$sentinel *= 7;
 					search($n-1);
@@ -100,6 +101,13 @@ function search($n) {
 function escape_brackets($str) {
 	
 	return $str;
+}
+
+function print_formula($fml) {
+	$ops = str_split($fml);
+	for($i = 0; $i <= 7 ; $i++) {
+		
+	}
 }
 
 function check_exist($needle,$haystack){
