@@ -1,10 +1,10 @@
 <?php
 define('PRECISION', 1E-6);
 
-$number  = array(4,5,6,7);
+$number  = array(6,6,6,6);
 $formula = $number;
+
 $sentinels = array();
-$sentinel = 1;
 
 search(4);
 
@@ -12,20 +12,18 @@ function search($n) {
 	global $number;
 	global $formula;
 	global $sentinels;
-	global $sentinel;
 		
 	if(1 == $n) {
 		if(abs($number[0] - 24) <= PRECISION) {
 			
 			$fml = escape_brackets($formula[0]);
-			//$sentinel = weight($sentinel,$fml);
 			
 			if(check_exist($fml,$sentinels)){
 				$sentinels[] = $fml;
-				var_dump($fml);
-				echo "<br>";
-				//var_dump($sentinel);
-				//$sentinel = 0;
+				
+				print_formula($fml);
+				var_dump($fml);	echo "<br>";
+				
 				return true;
 			}
 			else {
@@ -50,42 +48,30 @@ function search($n) {
 				
 				$formula[$i] = $formula_a.$formula_b.'+';
 				$number[$i] = $a + $b;
-				$sentinel *= 2 ;
 				search($n-1);				
-				$sentinel /= 2;
 				
 				$formula[$i] =  $formula_a.$formula_b.'-';
 				$number[$i] = $a - $b;
-				$sentinel *= 3;
 				search($n-1);
-				$sentinel /= 3;
 				
 				$formula[$i] = $formula_b.$formula_a.'-';
 				$number[$i] = $b - $a;
-				$sentinel *= 3;
 				search($n-1);
-				$sentinel /= 3;
 				
 				$formula[$i] = $formula_a.$formula_b.'*';					
 				$number[$i] = $a * $b;
-				$sentinel *= 5;
 				search($n-1);
-				$sentinel /= 5;
 									
 				if($b != 0){
 					$formula[$i] = $formula_a.$formula_b.'/';
 					$number[$i] = $a / $b;
-					$sentinel *= 7;
 					search($n-1);
-					$sentinel /= 7;
 				}
 				
 				if($a != 0){
 					$formula[$i] = $formula_b.$formula_a.'/';
 					$number[$i] = $b / $a;
-					$sentinel *= 7;
 					search($n-1);
-					$sentinel /= 7;
 				}
 				
 				$number[$i] = $a;
@@ -104,9 +90,73 @@ function escape_brackets($str) {
 }
 
 function print_formula($fml) {
-	$ops = str_split($fml);
-	for($i = 0; $i <= 7 ; $i++) {
+	$opts = array();
+	$nums = array();
+	$symbols = str_split($fml);
+	for($i = 0; $i < 7; $i++) {
+		if( is_numeric($symbols[$i])) {
+			$nums[] = $symbols[$i];
+			$symbols[$i] = 0;//excellent!
+		}
+		else {
+			$opts[] = $symbols[$i];
+			$symbols[$i] = 1; //excellent!
+		}
+	}
+	$a = $nums[0];
+	$b = $nums[1];
+	$c = $nums[2];
+	$d = $nums[3];
+	
+	$op1 = $opts[0];
+	$op2 = $opts[1];
+	$op3 = $opts[2];
+	
+	// (A?B)?(C?D)
+	$pattern = array(0,0,1,0,0,1,1);
+	if($pattern === $symbols){
+		if($op3 == '+') {
+			$fml = $a.$op1.$b.$op3.$c.$op2.$d;
+		}
+		else {
+			if($op2 == '*' || $op2 == '/') {
+				if($op1 == '*' || $op1 == '/') {
+					$fml = $a.$op1.$b.$op3.$c.$op2.$d;
+				}
+				else {
+					$fml = "(".$a.$op1.$b.")".$op3.$c.$op2.$d;
+				}
+			}
+			else {
+				if($op1 == '*' || $op1 == '/') {
+					$fml = $a.$op1.$b.$op3."(".$c.$op2.$d.")";
+				}
+				else {
+					$fml = "(".$a.$op1.$b.")".$op3."(".$c.$op2.$d.")";
+				}
+			}
+		}
+	}
+	//(A?B?C)?D
+	else {
 		
+		$fml1 = operate($a,$b,$op1);
+		
+		preg_replace($matches[0], $fml1, $fml);
+		var_dump($fml);
+	}
+	echo $fml;
+}
+function operate($a,$b,$op) {
+	switch($op) {
+		case '+':
+			return $a+$b;
+		case '-':
+			return $a-$b;
+		case '*':
+			return $a*$b;
+		case '/':
+			return $a/$b;
 	}
 }
 
@@ -115,29 +165,5 @@ function check_exist($needle,$haystack){
 		return false;
 	}
 	return true;
-}
-
-function weight($sentinel,$str) {
-	//(a op b) op c) op d   or   (a op (b op c)) op d
-	$pattern1 = '#\(.*\)[\+\-\*\/]\d#';
-	if(preg_match($pattern1,$str,$matches)) {
-		$sentinel *= 17;
-		return $sentinel;
-	}
-		
-	//a op ((b op c) op d)  or  a op (b op (c op d))
-	$pattern3 = '#\d[\+\-\*\/]\(.*\)#';
-	if(preg_match($pattern3, $str)) {
-		$sentinel *= 23;
-		return $sentinel;
-	}
-		
-	//(a op b) op (c op d)  
-	$pattern2 = '#\(*\)[\+\-\*\/]\(.*\)#';
-	if(preg_match($pattern2,$str,$matches)) {
-		$sentinel *= 19;
-		return $sentinel;
-	} 
-	return $sentinel;
 }
 ?>
