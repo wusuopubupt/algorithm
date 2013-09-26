@@ -92,15 +92,16 @@ function escape_brackets($str) {
 function print_formula($fml) {
 	$opts = array();
 	$nums = array();
-	$symbols = str_split($fml);
+	$fmls = str_split($fml);
+	$map = array();
 	for($i = 0; $i < 7; $i++) {
-		if( is_numeric($symbols[$i])) {
-			$nums[] = $symbols[$i];
-			$symbols[$i] = 0;//excellent!
+		if( is_numeric($fmls[$i])) {
+			$nums[] = $fmls[$i];
+			$map[$i] = 0;//excellent!
 		}
 		else {
-			$opts[] = $symbols[$i];
-			$symbols[$i] = 1; //excellent!
+			$opts[] = $fmls[$i];
+			$map[$i] = 1; //excellent!
 		}
 	}
 	$a = $nums[0];
@@ -114,7 +115,7 @@ function print_formula($fml) {
 	
 	// (A?B)?(C?D)
 	$pattern = array(0,0,1,0,0,1,1);
-	if($pattern === $symbols){
+	if($pattern === $map){
 		if($op3 == '+') {
 			$fml = $a.$op1.$b.$op3.$c.$op2.$d;
 		}
@@ -139,24 +140,22 @@ function print_formula($fml) {
 	}
 	//(A?B?C)?D
 	else {
+		$fml1 = search_map($map,$fmls);
 		
-		$fml1 = operate($a,$b,$op1);
-		
-		preg_replace($matches[0], $fml1, $fml);
-		var_dump($fml);
 	}
 	echo $fml;
 }
-function operate($a,$b,$op) {
-	switch($op) {
-		case '+':
-			return $a+$b;
-		case '-':
-			return $a-$b;
-		case '*':
-			return $a*$b;
-		case '/':
-			return $a/$b;
+
+function search_map(&$map,&$fmls) {
+	for($i = 0; $i <= 4 ; $i++) {
+		if(($map[$i] == 0) && ($map[$i+1] == 0) && ($map[$i+2] == 1)) {
+			$fml1 = $fmls[$i].$fmls[$i+2].$fmls[$i+1];
+			$map[$i+2] = 0;
+			
+			return $fml1;
+		}
+		else 
+			continue;
 	}
 }
 
