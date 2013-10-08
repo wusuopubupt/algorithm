@@ -175,4 +175,4 @@ function delete($node,$obj) {
 	else
 		delete($node['right'],$obj);
 }
-
+?>
