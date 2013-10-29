@@ -2,7 +2,7 @@
 /**
  * @author : wusuopubupt
  * @date : 2013-10-29
- * 
+ * @reference : http://v.youku.com/v_show/id_XMjg5ODQ1MzA0.html
  * bbs.byr.cn auto login script
  * 
  * */
