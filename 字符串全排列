@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+ 
+int cmp(const void *a, const void *b);
+void permutation(char* pStr, char* pBegin);
+ 
+char s[362890][11];
+int count;
+ 
+int main() {
+    char str[11], temp[11];
+    int n, f, i;
+    while (scanf("%s", str) != EOF) {
+        count = 0;
+        n = strlen(str);
+        permutation(str, str);
+        f = 1;
+        for (i = 1; i <= n; i++) {
+            f = f * i;
+        }
+        qsort(s, f, sizeof(char)*11, cmp);
+        strcpy(temp, "\0");
+        for (i = 0; i < f; i++)
+            if (strcmp(temp, s[i])) {
+                strcpy(temp, s[i]);
+                printf("%s\n", s[i]);
+            }
+    }
+    return 0;
+}
+ 
+int cmp(const void *a, const void *b) {
+    char* s1 = (char *) a;
+    char* s2 = (char *) b;
+    return strcmp(s1, s2);
+}
+ 
+ 
+void permutation(char* pStr, char* pBegin) {
+    if (*pBegin == '\0') {
+        strcpy(s[count], pStr);
+        count++;
+    }
+    else {
+        char *pCh;
+        for (pCh = pBegin; *pCh != '\0'; pCh++) {
+            char temp = *pCh;
+            *pCh = *pBegin;
+            *pBegin = temp;
+ 
+            permutation(pStr, pBegin + 1);
+ 
+            temp = *pCh;
+            *pCh = *pBegin;
+            *pBegin = temp;
+        }
+    }
+}
+ 
+/**************************************************************
+    Problem: 1369
+    User: wusuopuBUPT
+    Language: C
+    Result: Accepted
+    Time:300 ms
+    Memory:8712 kb
+****************************************************************/
