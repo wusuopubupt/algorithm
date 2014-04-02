@@ -176,9 +176,23 @@ void quick_sort(int *a, int low, int high) {
  * 再对全体元素进行一次直接插入排序。其时间复杂度为O(n^3/2),要好于直接插入排序的O(n^2)
  *
  * */
-void shell_sort(int *a, int n) {
+void shell_sort(int a[], size_t n) {
+	int gap;
+	for(gap = n/2; gap > 0; gap /= 2) {
+		int i;
+		for(i = gap; i < n; i++) {
+			if(a[i] < a[i-gap]) {
+				int j = i - gap;
+				int temp = a[i];
+				while(j >= 0 && a[j] > a[i]) {
+					a[j+gap] = a[j];
+					j -= gap;
+				}
+				a[j+gap] = temp;
+			}
+		}
+	}
 }
-
 
 /*
  * merge sort
@@ -306,5 +320,4 @@ void heap_sort(int *a, int n) {
 	}
 	dump_arr(heap, n);
 }
-
 
