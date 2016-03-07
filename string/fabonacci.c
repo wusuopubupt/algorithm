@@ -20,7 +20,9 @@ int fabonacci(int n) {
     if(1 == n || 2 == n) {
         return 1;
     }
-    int i = 3, a = 1, b=1;
+    int i = 3;
+    long long a = 1;
+    long long b = 1;
     long long fab = 0;
     for(i = 3; i <= n; i++) {
         fab = a + b;    
