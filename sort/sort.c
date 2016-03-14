@@ -139,6 +139,7 @@ void quick_sort(int *a, int low, int high) {
 	int i = low, j = high;
 	int pivot = a[mid];
 
+    // 9,3,8,5,1,7,6
 	while(i < j) {
 		while(i <= mid && a[i] < pivot) {
 			i++;
