@@ -1,3 +1,4 @@
+// 重建二叉树(已知先序和中序遍历结果)
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -88,36 +89,3 @@ void rebuild(int *pPreOrder, int *pInOrder, int len, tree *root) {
         rebuild(pPreOrder+nLeftLen+1, pInOrder+nLeftLen+1, nRightLen, root->right);
     }
 }
-
-/*
-   void rebuild(int *preOrder, int *inOrder, int preOrderIndex, int inOrderIndex, int len, tree *root) {
-   if(preOrder == NULL || inOrder == NULL) return;
-   if(len == 1) return;
-
-   root = (tree *)malloc(sizeof(tree *));
-   if(root == NULL) {
-   root->data = preOrder[preOrderIndex];
-   root->left = NULL;
-   root->right = NULL;
-   }
-
-   int i = inOrderIndex;
-   while(inOrder[inOrderIndex] != preOrder[preOrderIndex]) {
-   if(inOrder[inOrderIndex] == NULL )
-   i++;
-   if(i > len) {
-   break;
-   }
-   }
-
-   int leftLen = i - inOrderIndex;
-   int rightLen = len - 1 - leftLen;
-
-   if(leftLen > 0) {
-   rebuild(preOrder, inOrder, preOrderIndex+1, inOrderIndex, leftLen, root->left);
-   }
-   if(rightLen > 0) {
-   rebuild(preOrder, inOrder, preOrderIndex+leftLen+1, inOrderIndex+leftLen+1, rightLen, root->right);
-   }
-   }
- */
