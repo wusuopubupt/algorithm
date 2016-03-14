@@ -25,11 +25,13 @@ node *create_btree() {
 
 void print_tree(node *tree) {
     if (tree) {
-        printf("%c\n", tree->data);
+        printf("%c\t", tree->data);
         if(tree->left) {
+            printf("left\n");
             print_tree(tree->left);
         }
         if(tree->right) {
+            printf("right\n");
             print_tree(tree->left);
         }
     }
@@ -37,27 +39,32 @@ void print_tree(node *tree) {
 
 void print_tree_by_level(node *tree, int n) {
     node **arr_tree = (node **)malloc(sizeof(node*)*n);
-    // 每层的个数
+    int cur = 0, last = 0, level = 0;
     int count[n];
-    int cur = 0, last = 0;
-    arr_tree[cur] = tree;
+    bzero(count, n);
+    arr_tree[0] = tree;
+    count[0] = 1;
     while(cur < last+1) {
-        // 一层
         int i = 0;
-        while (i < count[cur]){
-            printf("%c\t", arr_tree[cur]->data);
+        while (i < count[level]){
+            node *nd = arr_tree[cur];
+            //printf("i:%d, level:%d, count:%d \n", i, level, count[level]);
+            if(nd) {
+                printf("%c\t", nd->data);
+            }
             i++;
-            if(arr_tree[cur]->left) {
-                arr_tree[++last] = arr_tree[cur]->left; 
-                count[cur+1]++;
+            if(nd->left) {
+                arr_tree[++last] = nd->left;
+                count[level+1]++;
             } 
             if(arr_tree[cur]->right) {
-                arr_tree[++last] = arr_tree[cur]->right;
-                count[cur+1]++;
+                arr_tree[++last] = nd->right;
+                count[level+1]++;
             }
             cur++;
         }
-        //putchar('\n');
+        level++;
+        putchar('\n');
     }
     free(arr_tree);
     arr_tree = NULL;
