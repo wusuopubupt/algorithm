@@ -1,3 +1,5 @@
+// 字符串的全排列
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,13 +18,14 @@ int main() {
         n = strlen(str);
         permutation(str, str);
         f = 1;
+    //f == 3*2*1
         for (i = 1; i <= n; i++) {
             f = f * i;
         }
         qsort(s, f, sizeof(char)*11, cmp);
         strcpy(temp, "\0");
         for (i = 0; i < f; i++)
-            if (strcmp(temp, s[i])) {
+            if (strcmp(temp, s[i])) { //filter bba,bba
                 strcpy(temp, s[i]);
                 printf("%s\n", s[i]);
             }
@@ -45,12 +48,14 @@ void permutation(char* pStr, char* pBegin) {
     else {
         char *pCh;
         for (pCh = pBegin; *pCh != '\0'; pCh++) {
-            char temp = *pCh;
+        //swap pCh and pBegin(eg:bac)
+            char temp = *pCh; 
             *pCh = *pBegin;
             *pBegin = temp;
  
             permutation(pStr, pBegin + 1);
- 
+        
+        // restore pCh and pBegin(abc)
             temp = *pCh;
             *pCh = *pBegin;
             *pBegin = temp;
@@ -66,3 +71,4 @@ void permutation(char* pStr, char* pBegin) {
     Time:300 ms
     Memory:8712 kb
 ****************************************************************/
+
