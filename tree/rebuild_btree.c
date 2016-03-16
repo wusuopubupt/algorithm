@@ -52,6 +52,7 @@ void rebuild(int *pPreOrder, int *pInOrder, int len, tree *root) {
         return;
     }
     root = (tree *)malloc(sizeof(tree *));
+    // 先序遍历序列的第一个元素必定是根节点
     root->data = *pPreOrder;
     root->left = NULL;
     root->right = NULL;
