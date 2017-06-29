@@ -13,22 +13,29 @@ int main() {
         for(i = 0; i < n; i++) {
             scanf("%d", &a[i]);
         }
-        int sum[n];
-        memset(sum, 0, n);
+        //int sum[n];
+        //memset(sum, 0, n);
+		int tmpMaxSum = 0;
         int maxSum = a[0], currentStart = 0, start = 0, end = 0;
-        sum[0] = a[0];
         for(i = 1; i < n; i++) {
             //printf("i:%d, sum[i]:%d, start:%d, end:%d\n", i, sum[i], start, end);
-            if(sum[i-1] < 0) {
-                sum[i] = a[i];
+            printf("i:%d, tmpMaxSum:%d, start:%d, end:%d\n", i, tmpMaxSum, start, end);
+            //if(sum[i-1] < 0) {
+            if(tmpMaxSum <= 0) {
+                //sum[i] = a[i];
+				tmpMaxSum = a[i];
                 currentStart = i;
             }
             else {
-                sum[i] = sum[i-1] + a[i];
+                //sum[i] = sum[i-1] + a[i];
+                tmpMaxSum = tmpMaxSum + a[i];
+				tmpMaxSum += a[i];
             }
  
-            if((sum[i] > maxSum) || ((sum[i] == maxSum) && a[start] > a[currentStart])) {
-                maxSum = sum[i];
+            //if((sum[i] > maxSum) || ((sum[i] == maxSum) && a[start] > a[currentStart])) {
+            if((tmpMaxSum > maxSum)){
+                //maxSum = sum[i];
+                maxSum = tmpMaxSum;
                 start = currentStart;
                 end = i;
             }
