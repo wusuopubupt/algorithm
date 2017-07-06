@@ -1,4 +1,9 @@
 // Rebuild binary tree
+//      a
+//     / \
+//    b   c
+//   /   / \
+//  d   e   f
 // pre order：a b d c e f  (so we can kwnow that a is root)
 // mid order：d b a e c f  (d and b are at left, c and f are at right) 
 #include<stdio.h>
