@@ -1,4 +1,6 @@
-// 重建二叉树(已知先序和中序遍历结果)
+// Rebuild binary tree
+// pre order：a b d c e f  (so we can kwnow that a is root)
+// mid order：d b a e c f  (d and b are at left, c and f are at right) 
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -48,15 +50,17 @@ void printPostOrder(tree *root) {
 }
 
 void rebuild(int *pPreOrder, int *pInOrder, int len, tree *root) {
+	// check the boundary conditions  
     if (pPreOrder == NULL || pInOrder == NULL) {
         return;
     }
     root = (tree *)malloc(sizeof(tree *));
-    // 先序遍历序列的第一个元素必定是根节点
+    // first element of pPreOrder is root
     root->data = *pPreOrder;
     root->left = NULL;
     root->right = NULL;
 
+	// reaches leaf node
     if (len == 1) {
         return;
     }
@@ -65,7 +69,11 @@ void rebuild(int *pPreOrder, int *pInOrder, int len, tree *root) {
     int *pLeftEnd = pInOrder;
     int ntemp = 0;
 
-    while (*pPreOrder != *pLeftEnd) {
+	// find leaf sub tree's end
+	// pre order：a b d c e f  
+	// mid order：d b a e c f 
+	// root->data = a
+    while (*pLeftEnd != root->data) {
         if (pPreOrder == NULL || pLeftEnd == NULL) {
             return;
         }
